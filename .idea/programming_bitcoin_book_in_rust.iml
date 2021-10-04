@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-bigint-ea540cbe4957ee73/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-integer-14af52930aba1caa/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-iter-52bcf4acb3fe94a3/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-rational-782895b362010c64/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-traits-27808feb4eaf30a1/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/encriptions/target/debug/build/num-traits-4c4935b3ad2f67e3/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/num-bigint-ea540cbe4957ee73/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/num-integer-14af52930aba1caa/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/num-iter-52bcf4acb3fe94a3/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/num-rational-782895b362010c64/out" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/debug/build/num-traits-4c4935b3ad2f67e3/out" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+      <excludeFolder url="file://$MODULE_DIR$/crates/encriptions/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
