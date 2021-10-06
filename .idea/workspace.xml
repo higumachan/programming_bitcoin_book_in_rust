@@ -13,7 +13,7 @@
     <cargoProject FILE="$PROJECT_DIR$/crates/encriptions/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5ccb76d-7029-452c-93b9-971896a0eaf7" name="Default Changelist" comment="不格好ではあるがPointのFieldを入れ替えられるようにした">
+    <list default="true" id="a5ccb76d-7029-452c-93b9-971896a0eaf7" name="Default Changelist" comment="加法を定義する">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/encriptions/src/curve.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/encriptions/src/curve.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/encriptions/src/field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/encriptions/src/field.rs" afterDir="false" />
@@ -161,7 +161,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633351672472</updated>
-      <workItem from="1633351673885" duration="18498000" />
+      <workItem from="1633351673885" duration="20075000" />
     </task>
     <task id="LOCAL-00001" summary="ベーシックな体の元の定義をする">
       <created>1633352482725</created>
@@ -198,7 +198,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633522531891</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="加法を定義する">
+      <created>1633529689384</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1633529689384</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,7 +228,8 @@
     <MESSAGE value="コミット忘れ" />
     <MESSAGE value="楕円曲線とその上を取る点を定義" />
     <MESSAGE value="不格好ではあるがPointのFieldを入れ替えられるようにした" />
-    <option name="LAST_COMMIT_MESSAGE" value="不格好ではあるがPointのFieldを入れ替えられるようにした" />
+    <MESSAGE value="加法を定義する" />
+    <option name="LAST_COMMIT_MESSAGE" value="加法を定義する" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

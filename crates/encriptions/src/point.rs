@@ -2,7 +2,7 @@ use crate::curve::EllipticCurve;
 use crate::field::Field;
 use num::{BigInt, Float};
 use std::marker::PhantomData;
-use std::ops::Add;
+use std::ops::{Add, Mul};
 
 pub trait Point<T> {
     fn x(&self) -> Option<T>;
@@ -67,6 +67,14 @@ impl<T: Field + Clone, C: EllipticCurve<T>> Point<T> for PointOnCurve<T, C> {
     }
 }
 
+impl<T: Field<Output = T> + Clone, C: EllipticCurve<T>> Mul<PointOnCurve<T, C>> for BigInt {
+    type Output = PointOnCurve<T, C>;
+
+    fn mul(self, rhs: PointOnCurve<T, C>) -> Self::Output {
+        unimplemented!()
+    }
+}
+
 impl<T: Field<Output = T> + Clone, C: EllipticCurve<T>> Add for PointOnCurve<T, C> {
     type Output = Self;
 
@@ -110,7 +118,7 @@ impl<T: Field<Output = T> + Clone, C: EllipticCurve<T>> Add for PointOnCurve<T, 
 mod tests {
     use super::*;
     use crate::curve::{Secp256k1, TestEllipticCurve};
-    use crate::field::f64FieldElement;
+    use crate::field::{f64FieldElement, LimitedFieldElement, Prime223};
 
     #[test]
     fn create_point_on_curve() {
@@ -191,5 +199,69 @@ mod tests {
             ))
             .unwrap()
         );
+    }
+
+    fn secp256k1_point(
+        x: i64,
+        y: i64,
+    ) -> Option<PointOnCurve<LimitedFieldElement<Prime223>, Secp256k1>> {
+        PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+            LimitedFieldElement::from(x),
+            LimitedFieldElement::from(y),
+        ))
+    }
+
+    #[test]
+    fn curve_on_limited_field() {
+        assert!(
+            PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+                LimitedFieldElement::from(192),
+                LimitedFieldElement::from(105)
+            ),)
+            .is_some()
+        );
+        assert!(
+            PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+                LimitedFieldElement::from(17),
+                LimitedFieldElement::from(56)
+            ),)
+            .is_some()
+        );
+        assert!(
+            !(PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+                LimitedFieldElement::from(200),
+                LimitedFieldElement::from(119)
+            ),)
+            .is_some())
+        );
+        assert!(
+            PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+                LimitedFieldElement::from(1),
+                LimitedFieldElement::from(193)
+            ),)
+            .is_some()
+        );
+        assert!(
+            !(PointOnCurve::<LimitedFieldElement<Prime223>, Secp256k1>::new(GeneralPoint::finite(
+                LimitedFieldElement::from(42),
+                LimitedFieldElement::from(99)
+            ),)
+            .is_some())
+        );
+    }
+
+    #[test]
+    fn curve_add_limited_field() {
+        let p1 = secp256k1_point(170, 142).unwrap();
+        let p2 = secp256k1_point(60, 139).unwrap();
+        assert_eq!(p1 + p2, secp256k1_point(220, 181).unwrap());
+
+        let p1 = secp256k1_point(47, 71).unwrap();
+        let p2 = secp256k1_point(17, 56).unwrap();
+        assert_eq!(p1 + p2, secp256k1_point(215, 68).unwrap());
+
+        let p1 = secp256k1_point(143, 98).unwrap();
+        let p2 = secp256k1_point(76, 66).unwrap();
+        assert_eq!(p1 + p2, secp256k1_point(47, 71).unwrap());
     }
 }

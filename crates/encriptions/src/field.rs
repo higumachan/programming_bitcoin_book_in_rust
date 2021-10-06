@@ -4,14 +4,14 @@ use num_traits::Pow;
 use std::marker::PhantomData;
 use std::ops::{Add, Div, Mul, Neg, Rem, Sub};
 
-trait Prime {
+pub trait Prime {
     fn get_prime() -> BigUint;
 }
 
 macro_rules! def_prime_struct {
     ($name: ident, $value: literal) => {
         #[derive(Debug, Clone, PartialEq)]
-        struct $name;
+        pub struct $name;
 
         impl Prime for $name {
             fn get_prime() -> BigUint {
@@ -42,7 +42,7 @@ pub trait Field:
 }
 
 #[derive(Debug, Clone, PartialEq)]
-struct LimitedFieldElement<P: Prime>(BigUint, PhantomData<P>);
+pub struct LimitedFieldElement<P: Prime>(BigUint, PhantomData<P>);
 
 impl<P: Prime> LimitedFieldElement<P> {
     pub fn new(value: BigUint) -> Option<Self> {

@@ -32,25 +32,25 @@ pub trait EllipticCurve<T> {
 #[derive(Debug, PartialEq)]
 pub struct Secp256k1;
 
-impl<'a, T: Field + From<f64>> EllipticCurve<T> for Secp256k1 {
+impl<'a, T: Field + From<i64>> EllipticCurve<T> for Secp256k1 {
     fn a() -> T {
-        T::from(0.0)
+        T::from(0)
     }
 
     fn b() -> T {
-        T::from(7.0)
+        T::from(7)
     }
 }
 
 #[derive(Debug, PartialEq)]
 pub struct TestEllipticCurve;
 
-impl<'a, T: Field + From<f64>> EllipticCurve<T> for TestEllipticCurve {
+impl<'a, T: Field + From<i64>> EllipticCurve<T> for TestEllipticCurve {
     fn a() -> T {
-        T::from(5.0)
+        T::from(5)
     }
 
     fn b() -> T {
-        T::from(7.0)
+        T::from(7)
     }
 }
