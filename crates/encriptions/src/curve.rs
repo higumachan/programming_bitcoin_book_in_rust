@@ -20,17 +20,8 @@ pub trait EllipticCurve<T> {
                     ) + Self::b(),
                 )),
             )
-            /*
-            T::from(point.y().unwrap().pow(BigInt::from(2)))
-                == T::from(
-                    point.x().unwrap().pow(BigInt::from(3))
-                        + Self::a() * point.x().unwrap()
-                        + Self::b(),
-                )
-
-                 */
         } else {
-            false
+            true
         }
     }
 

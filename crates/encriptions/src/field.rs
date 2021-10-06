@@ -24,6 +24,7 @@ macro_rules! def_prime_struct {
 def_prime_struct!(Prime13, 13);
 def_prime_struct!(Prime19, 19);
 def_prime_struct!(Prime29, 29);
+def_prime_struct!(Prime223, 223);
 
 pub trait Field:
     Add<Output = <Self as Field>::Output>
@@ -35,6 +36,7 @@ pub trait Field:
     + PartialEq
     + From<<Self as Field>::Output>
     + From<Self>
+    + From<i64>
 {
     type Output: Field;
 }
@@ -108,6 +110,12 @@ impl<P: Prime> Pow<BigInt> for LimitedFieldElement<P> {
     }
 }
 
+impl<P: Prime> From<i64> for LimitedFieldElement<P> {
+    fn from(v: i64) -> Self {
+        Self::new(rem_euclid(&v.to_bigint().unwrap(), &P::get_prime())).unwrap()
+    }
+}
+
 fn rem_euclid(a: &BigInt, b: &BigUint) -> BigUint {
     let sign = a.sign();
 
@@ -172,6 +180,12 @@ impl Pow<BigInt> for f64FieldElement {
 impl From<f64> for f64FieldElement {
     fn from(f: f64) -> Self {
         Self(f)
+    }
+}
+
+impl From<i64> for f64FieldElement {
+    fn from(v: i64) -> Self {
+        Self(v.to_f64().unwrap())
     }
 }
 

@@ -1,7 +1,8 @@
 use crate::curve::EllipticCurve;
 use crate::field::Field;
-use num::Float;
+use num::{BigInt, Float};
 use std::marker::PhantomData;
+use std::ops::Add;
 
 pub trait Point<T> {
     fn x(&self) -> Option<T>;
@@ -56,13 +57,52 @@ impl<'a, T: Field + Clone, C: EllipticCurve<T>> PointOnCurve<T, C> {
     }
 }
 
-impl<'a, T: Field + Clone, C: EllipticCurve<T>> Point<T> for PointOnCurve<T, C> {
+impl<T: Field + Clone, C: EllipticCurve<T>> Point<T> for PointOnCurve<T, C> {
     fn x(&self) -> Option<T> {
         self.0.x()
     }
 
     fn y(&self) -> Option<T> {
         self.0.y()
+    }
+}
+
+impl<T: Field<Output = T> + Clone, C: EllipticCurve<T>> Add for PointOnCurve<T, C> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        match (self.0, rhs.0) {
+            (GeneralPoint::Infinite, r) => Self(r, PhantomData),
+            (l, GeneralPoint::Infinite) => Self(l, PhantomData),
+            (GeneralPoint::Finite { x: x1, y: y1 }, GeneralPoint::Finite { x: x2, y: y2 }) => {
+                if x1.eq(&x2) {
+                    if y1.ne(&y2) {
+                        Self::new(GeneralPoint::Infinite).unwrap()
+                    } else {
+                        let s = (x1.clone().pow(BigInt::from(2)) * T::from(3) + C::a())
+                            / (y1.clone() * T::from(2));
+
+                        let x3 = s.clone().pow(BigInt::from(2)) - x1.clone() - x2.clone();
+                        Self::new(GeneralPoint::Finite {
+                            x: x3.clone(),
+                            y: s.mul(x1.clone() - x3) - y1.clone(),
+                        })
+                        .unwrap()
+                    }
+                } else {
+                    let s = T::from(
+                        T::from((y2.clone() - y1.clone())) / T::from((x2.clone() - x1.clone())),
+                    );
+
+                    let x3 = s.clone().pow(BigInt::from(2)) - x1.clone() - x2.clone();
+                    Self::new(GeneralPoint::Finite {
+                        x: x3.clone(),
+                        y: s.mul(x1.clone() - x3) - y1.clone(),
+                    })
+                    .unwrap()
+                }
+            }
+        }
     }
 }
 
@@ -90,6 +130,66 @@ mod tests {
                 f64FieldElement::from(-2.0)
             )),
             None
+        );
+    }
+
+    #[test]
+    fn point_on_curve_add() {
+        let p1 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(2.0),
+            f64FieldElement::from(5.0),
+        ))
+        .unwrap();
+        let p2 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(-1.0),
+            f64FieldElement::from(-1.0),
+        ))
+        .unwrap();
+
+        assert_eq!(
+            p1 + p2,
+            PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+                f64FieldElement::from(3.0),
+                f64FieldElement::from(-7.0),
+            ))
+            .unwrap()
+        );
+
+        let p1 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(2.0),
+            f64FieldElement::from(5.0),
+        ))
+        .unwrap();
+        let p2 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(2.0),
+            f64FieldElement::from(-5.0),
+        ))
+        .unwrap();
+
+        assert_eq!(
+            p1 + p2,
+            PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::Infinite)
+                .unwrap()
+        );
+
+        let p1 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(-1.0),
+            f64FieldElement::from(-1.0),
+        ))
+        .unwrap();
+        let p2 = PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+            f64FieldElement::from(-1.0),
+            f64FieldElement::from(-1.0),
+        ))
+        .unwrap();
+
+        assert_eq!(
+            p1 + p2,
+            PointOnCurve::<f64FieldElement, TestEllipticCurve>::new(GeneralPoint::finite(
+                f64FieldElement::from(18.0),
+                f64FieldElement::from(77.0),
+            ))
+            .unwrap()
         );
     }
 }
